@@ -1,6 +1,15 @@
+const { src, dest } = require('gulp');
+const pug = require('gulp-pug');
+
+
 function defaultTask(cb) {
-  // place code for your default task here
-  cb();
+  return src('./src/*.pug')
+    .pipe(
+      pug({
+        // Your options in here.
+      })
+    )
+    .pipe(dest('./dist'));
 }
 
 exports.default = defaultTask
