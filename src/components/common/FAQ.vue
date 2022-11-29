@@ -1,18 +1,32 @@
-<template lang="pug">
-mixin faqItem(question, answer)
-  div.faq__list-item
-    h5.faq__list-item__question= question
-    p.faq__list-item__answer= answer
-
-section.faq
-  div.faq__block
-    h1.section__title Подготовили для Вас ответы<br>на популярные вопросы
-    div.faq__list
-      +faqItem('Для чего это нужно?', 'Foodly – это сервис, который предоставляет каждому без лишних трудностей узнать, какие добавки в составе продукта являются вредными и почему.')
-      +faqItem('Откуда у вас составы продуктов?', 'Foodly – это сервис, который предоставляет каждому без лишних трудностей узнать, какие добавки в составе продукта являются вредными и почему.')
-      +faqItem('На какие аллергены выполняется проверка?', 'Foodly – это сервис, который предоставляет каждому без лишних трудностей узнать, какие добавки в составе продукта являются вредными и почему.')
-      +faqItem('Где я могу узнать полный список добавок?', 'Foodly – это сервис, который предоставляет каждому без лишних трудностей узнать, какие добавки в составе продукта являются вредными и почему.')
-    <router-link class="btn btn-secondary" :to="{name: 'contacts'}">Я не нашёл (-ла) ответ на свой вопрос</router-link>
+<template>
+  <section class="faq">
+    <div class="faq__block">
+      <h1 class="section__title">Подготовили для Вас ответы<br>на популярные вопросы</h1>
+      <div class="faq__list">
+        <div class="faq__list-item">
+          <h5 class="faq__list-item__question">Для чего это нужно?</h5>
+          <p class="faq__list-item__answer">Foodly – это сервис, который предоставляет каждому без лишних трудностей
+            узнать, какие добавки в составе продукта являются вредными и почему.</p>
+        </div>
+        <div class="faq__list-item">
+          <h5 class="faq__list-item__question">Откуда у вас составы продуктов?</h5>
+          <p class="faq__list-item__answer">Foodly – это сервис, который предоставляет каждому без лишних трудностей
+            узнать, какие добавки в составе продукта являются вредными и почему.</p>
+        </div>
+        <div class="faq__list-item">
+          <h5 class="faq__list-item__question">На какие аллергены выполняется проверка?</h5>
+          <p class="faq__list-item__answer">Foodly – это сервис, который предоставляет каждому без лишних трудностей
+            узнать, какие добавки в составе продукта являются вредными и почему.</p>
+        </div>
+        <div class="faq__list-item">
+          <h5 class="faq__list-item__question">Где я могу узнать полный список добавок?</h5>
+          <p class="faq__list-item__answer">Foodly – это сервис, который предоставляет каждому без лишних трудностей
+            узнать, какие добавки в составе продукта являются вредными и почему.</p>
+        </div>
+      </div>
+      <router-link class="btn btn-secondary" :to="{name: 'contacts'}">Я не нашёл (-ла) ответ на свой вопрос</router-link>
+    </div>
+  </section>
 </template>
 <script>
 export default {

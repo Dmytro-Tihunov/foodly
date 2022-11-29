@@ -1,18 +1,22 @@
-<template lang="pug">
-mixin whatKnowsItem(title, value, icon)
-  div.whatKnows__item
-    div.whatKnows__item-icon
-      img(src="/src/assets/img/" + icon alt=value + ": " + value)
-    div.whatKnows__item-text
-      div.whatKnows__item-title= title
-      div.whatKnows__item-value= value
-
-section.whatKnows
-  h1.section__title О чём знает Foodly?
-
-  div.whatKnows__items
-    +whatKnowsItem('Сохранено составов', 'Более 6000', 'saved_composition.svg')
-    +whatKnowsItem('Проверяемых добавок', '184 шт.', 'checking_supplements.svg')
-    +whatKnowsItem('Проверяемых аллергенов', '12 шт.', 'checking_allergens.svg')
-
+<template>
+  <section class="withCare">
+    <div class="withCare__block">
+      <h1 class="withCare__block-title">С заботой о Вашем здоровье</h1>
+      <p class="withCare__block-description">Найдём в составе компоненты, которые способны вызывать аллергические реакции</p>
+      <div class="withCare__block-example">
+        <div class="withCare__block-example__item">
+          <div class="withCare__block-example__item-title">Глютен</div>
+          <div class="withCare__block-example__item-value withCare__block-example__item-value-no">не содержится</div>
+        </div>
+        <div class="withCare__block-example__item">
+          <div class="withCare__block-example__item-title">Лактоза</div>
+          <div class="withCare__block-example__item-value withCare__block-example__item-value-maybe">возможно</div>
+        </div>
+        <div class="withCare__block-example__item">
+          <div class="withCare__block-example__item-title">Орехи</div>
+          <div class="withCare__block-example__item-value withCare__block-example__item-value-yes">содержится</div>
+        </div>
+      </div>
+    </div>
+  </section>
 </template>

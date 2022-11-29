@@ -1,20 +1,55 @@
-<template lang="pug">
-mixin contactWay(title, value, icon)
-  div.contact__way
-    div.contact__way__icon
-      img(src="/src/assets/img/contacts/" + icon alt=title)
-    div.contact__way__text
-      span.contact__way__text__title= title
-      a(href="#").contact__way__text__value= value
-
-div.contacts__block
-  div.product__block__header
-    h5.product__block__header-text Другие способы связи
-  div.product__block__body
-    div.contact__ways
-      +contactWay('Наш E-mail', 'help@foodly.org', 'email_icon.svg')
-      +contactWay('Горячая линия', '8 (800) 000-00-00', 'phone_icon.svg')
-      +contactWay('Мы в Telegram', '@foodly', 'telegram_icon.svg')
-      +contactWay('Мы в Instagram', '@foodly', 'instagram_icon.svg')
-      +contactWay('Мы ВКонтакте', '@foodly', 'vk_icon.svg')
+<template>
+  <div class="contacts__block">
+    <div class="product__block__header">
+      <h5 class="product__block__header-text">Другие способы связи</h5>
+    </div>
+    <div class="product__block__body">
+      <div class="contact__ways">
+        <div class="contact__way">
+          <div class="contact__way__icon">
+            <img src="/src/assets/img/contacts/email_icon.svg" alt="Наш E-mail">
+          </div>
+          <div class="contact__way__text">
+            <span class="contact__way__text__title">Наш E-mail</span>
+            <a class="contact__way__text__value" href="#">help@foodly.org</a>
+          </div>
+        </div>
+        <div class="contact__way">
+          <div class="contact__way__icon">
+            <img src="/src/assets/img/contacts/phone_icon.svg" alt="Горячая линия">
+          </div>
+          <div class="contact__way__text">
+            <span class="contact__way__text__title">Горячая линия</span>
+            <a class="contact__way__text__value" href="#">8 (800) 000-00-00</a>
+          </div>
+        </div>
+        <div class="contact__way">
+          <div class="contact__way__icon">
+            <img src="/src/assets/img/contacts/telegram_icon.svg" alt="Мы в Telegram">
+          </div>
+          <div class="contact__way__text">
+            <span class="contact__way__text__title">Мы в Telegram</span>
+            <a class="contact__way__text__value" href="#">@foodly</a>
+          </div>
+        </div>
+        <div class="contact__way">
+          <div class="contact__way__icon">
+            <img src="/src/assets/img/contacts/instagram_icon.svg" alt="Мы в Instagram">
+          </div>
+          <div class="contact__way__text">
+            <span class="contact__way__text__title">Мы в Instagram</span>
+            <a class="contact__way__text__value" href="#">@foodly</a></div>
+        </div>
+        <div class="contact__way">
+          <div class="contact__way__icon">
+            <img src="/src/assets/img/contacts/vk_icon.svg" alt="Мы ВКонтакте">
+          </div>
+          <div class="contact__way__text">
+            <span class="contact__way__text__title">Мы ВКонтакте</span>
+            <a class="contact__way__text__value" href="#">@foodly</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
