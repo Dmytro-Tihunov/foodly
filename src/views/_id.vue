@@ -1,15 +1,33 @@
+<script setup>
+import {useRoute} from "vue-router";
+import { useAppStore } from "@/store";
+import {onBeforeMount} from "vue";
+import { RouterLink } from "vue-router";
+
+const route = useRoute();
+const useStore = useAppStore();
+
+onBeforeMount(()=>{
+  useStore.getProduct(route.params.id);
+})
+
+</script>
+
 <template>
-  <section class="product">
+
+  <div v-if="useStore.isLoading">Loading...</div>
+
+  <section v-else class="product">
     <div class="product__main">
       <div class="product__block product__block-main">
-        <h5 class="product__block-main__title">Молоко 1,5% ультрапастеризованное 970 мл Простоквашино безлактозное</h5>
+        <h5 class="product__block-main__title">{{ useStore.openedProduct.name}}</h5>
         <div class="product__block-main__img">
-          <img src="/src/assets/img/product.jpg" alt="Молоко 1,5% ультрапастеризованное 970 мл Простоквашино безлактозное" />
+          <img :src="useStore.openedProduct.image" alt="Молоко 1,5% ультрапастеризованное 970 мл Простоквашино безлактозное" />
         </div>
         <div class="product__block-main__rows">
           <div class="product__block-main__rows-item">
             <div class="product__block-main__rows-item__name">Штрихкод</div>
-            <div class="product__block-main__rows-item__value">46033872786287</div>
+            <div class="product__block-main__rows-item__value">{{ useStore.openedProduct.barcode }}</div>
           </div>
           <div class="product__block-main__rows-item">
             <div class="product__block-main__rows-item__name">Страна</div>
@@ -30,9 +48,7 @@
           <h5 class="product__block__header-text">Состав</h5>
         </div>
         <div class="product__block__body">
-          <p class="product__block__body-text">Молоко пастеризованное, <span data-level="3">E282</span>,
-            закваска (термофильный молочнокислый стрептококк, болгарская палочка),
-            <span data-level="2">E282</span>, вода, <span data-level="1">E282</span>
+          <p class="product__block__body-text">{{useStore.openedProduct.composition }}
           </p>
         </div>
       </div>
@@ -42,18 +58,14 @@
         </div>
         <div class="product__block__body">
           <div class="product__block__body__allergens">
-            <div class="product__block__body__allergens-item">
-              <div class="product__block__body__allergens-item__name">Глютен</div>
-              <div class="product__block__body__allergens-item__value">не содержится</div>
+
+            <div v-for="(items, index) in useStore.openedProduct.allergens" :key="index" class="product__block__body__allergens-item">
+              <div class="product__block__body__allergens-item__name">{{items.ruName}}</div>
+              <div v-if="items.status === false" class="product__block__body__allergens-item__value">не содержится</div>
+              <div v-if="items.status" class="product__block__body__allergens-item__value">содержится</div>
+              <div v-if="items.status === null" class="product__block__body__allergens-item__value">возможно</div>
             </div>
-            <div class="product__block__body__allergens-item">
-              <div class="product__block__body__allergens-item__name">Лактоза</div>
-              <div class="product__block__body__allergens-item__value">возможно</div>
-            </div>
-            <div class="product__block__body__allergens-item">
-              <div class="product__block__body__allergens-item__name">Орехи</div>
-              <div class="product__block__body__allergens-item__value">содержится</div>
-            </div>
+
           </div>
         </div>
       </div>
