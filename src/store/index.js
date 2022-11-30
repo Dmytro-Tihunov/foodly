@@ -1,32 +1,50 @@
 import { defineStore } from "pinia";
-import api from "@/api/api";
+import api from "../api/api";
 
 export const useAppStore = defineStore({
   id: "appStore",
   state: () => ({
     searchQuery: "",
+    searchPage: 1,
     isLoading: false,
+    searchLastPage: false,
+    total: 0,
     error: null,
     data: [],
     openedProduct: [],
+    openedSupplement: []
   }),
   actions: {
     async getResult(){
       try {
         this.isLoading = true;
-        const response = await api.search(this.searchQuery);
-        this.data = response.data.items;
+        const response = await api.search(this.searchQuery, this.searchPage);
+        this.total = response.data.total;
+        this.data = this.data.length === 0 ? response.data.items : this.data.concat(response.data.items);
+        this.searchLastPage = response.data.isLastPage;
         this.isLoading = false;
       } catch (e) {
         this.error = e;
         this.isLoading = false;
       }
     },
-    async getProduct(pr){
+    async getProduct(barcode){
       try {
         this.isLoading = true;
-        const response = await api.product(pr);
+        const response = await api.product(barcode);
         this.openedProduct = response.data.data[0];
+        this.openedProduct.compositionHtml = this.parseSupplements;
+        this.isLoading = false;
+      } catch (e) {
+        this.error = e;
+        this.isLoading = false;
+      }
+    },
+    async getSupplement(supplementId){
+      try {
+        this.isLoading = true;
+        const response = await api.supplement(supplementId);
+        this.openedSupplement = response.data[0];
         this.isLoading = false;
       } catch (e) {
         this.error = e;
@@ -34,4 +52,13 @@ export const useAppStore = defineStore({
       }
     }
   },
+  getters: {
+    parseSupplements: (state) => {
+      let compositionHtml = state.openedProduct.composition;
+      state.openedProduct.supplements.forEach((supplement) => {
+        compositionHtml = compositionHtml.replace(supplement.name, `<span @click="openAlert" data-level="${supplement.data.level}">${supplement.name}</span>`)
+      });
+      return compositionHtml;
+    }
+  }
 });

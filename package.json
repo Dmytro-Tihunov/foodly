@@ -9,10 +9,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@vueuse/core": "^9.6.0",
     "axios": "^1.2.0",
     "pinia": "^2.0.27",
     "reset-css": "^5.0.1",
     "vue": "^3.2.41",
+    "vue-paginate-scroll": "^1.0.2",
     "vue-router": "^4.1.6",
     "vuex": "^4.0.2"
   },
