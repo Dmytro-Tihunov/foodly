@@ -3,7 +3,7 @@ import { useRouter } from 'vue-router'
 const router = useRouter();
 </script>
 <template>
-  <footer class="footer" :class="router.currentRoute.value.path === '/product' ? 'footer-filled' : ''">
+  <footer class="footer" :class="router.currentRoute.value.name === 'product' ? 'footer-filled' : ''">
     <div class="container">
       <div class="footer__links">
         <div class="footer__links__item"><p class="footer__links__item-title">Документация</p>

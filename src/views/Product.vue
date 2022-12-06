@@ -1,27 +1,77 @@
+<script setup>
+import {useRoute} from "vue-router";
+import {useAppStore} from "@/store";
+import {onBeforeMount, onMounted} from "vue";
+import {RouterLink} from "vue-router";
+
+const route = useRoute();
+const useStore = useAppStore();
+
+function getDataLevel(id) {
+  const mass = useStore.openedProduct.supplements.find((sup) => sup.name === id);
+  return mass.data.level
+}
+
+function getSupplement(id) {
+alert(id)
+}
+
+onBeforeMount(() => {
+  useStore.getProduct(route.params.id);
+})
+</script>
+
 <template>
-  <section class="product">
+
+  <section class="product product-empty" v-if="useStore.isLoading">
     <div class="product__main">
       <div class="product__block product__block-main">
-        <h5 class="product__block-main__title">Молоко 1,5% ультрапастеризованное 970 мл Простоквашино безлактозное</h5>
+        <h5 class="product__block-main__title"></h5>
+        <div class="product__block-main__img"></div>
+        <div class="product__block-main__rows">
+          <div class="product__block-main__rows-item"></div>
+          <div class="product__block-main__rows-item"></div>
+        </div>
+      </div>
+    </div>
+    <div class="product__analysis">
+      <div class="product__block product__block-analysis">
+        <div class="product__block__header">
+          <h5 class="product__block__header-text"></h5>
+        </div>
+        <div class="product__block__body">
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section v-else class="product">
+    <div class="product__main">
+      <div class="product__block product__block-main">
+        <h5 class="product__block-main__title">{{ useStore.openedProduct.name }}</h5>
         <div class="product__block-main__img">
-          <img src="/src/assets/img/product.jpg" alt="Молоко 1,5% ультрапастеризованное 970 мл Простоквашино безлактозное" />
+          <img :src="useStore.openedProduct.image" :alt="useStore.openedProduct.name"/>
         </div>
         <div class="product__block-main__rows">
           <div class="product__block-main__rows-item">
             <div class="product__block-main__rows-item__name">Штрихкод</div>
-            <div class="product__block-main__rows-item__value">46033872786287</div>
+            <div class="product__block-main__rows-item__value">{{ useStore.openedProduct.barcode }}</div>
           </div>
           <div class="product__block-main__rows-item">
             <div class="product__block-main__rows-item__name">Страна</div>
-            <div class="product__block-main__rows-item__value">Россия</div>
+            <div class="product__block-main__rows-item__value">{{ useStore.openedProduct.country }}</div>
           </div>
         </div>
         <div class="product__block-main__rating">
-          <img src="/src/assets/img/rating.svg" alt="" />
+          <img src="/src/assets/img/rating.svg" alt=""/>
           <div class="product__block-main__rating-value">4,9</div>
         </div>
       </div>
-      <div class="product__block product__block-perishable">Данный продукт относится к категории скоропортящихся, поэтому уделяйте особое внимание сроку годности!
+      <div class="product__block product__block-perishable" v-if="useStore.openedProduct.isPerishable">
+        Данный продукт относится к категории скоропортящихся, поэтому уделяйте особое внимание сроку годности!
       </div>
     </div>
     <div class="product__analysis">
@@ -30,9 +80,11 @@
           <h5 class="product__block__header-text">Состав</h5>
         </div>
         <div class="product__block__body">
-          <p class="product__block__body-text">Молоко пастеризованное, <span data-level="3">E282</span>,
-            закваска (термофильный молочнокислый стрептококк, болгарская палочка),
-            <span data-level="2">E282</span>, вода, <span data-level="1">E282</span>
+          <p class="product__block__body-text">
+            <template v-for="text in useStore.textSupplements">
+          <template v-if="text.isSuppliment === false">{{text.text}}</template>
+          <span :data-level="getDataLevel(text.text)" v-if="text.isSuppliment === true" @click="getSupplement(text.text)">{{text.text}}</span>
+        </template>
           </p>
         </div>
       </div>
@@ -42,18 +94,15 @@
         </div>
         <div class="product__block__body">
           <div class="product__block__body__allergens">
-            <div class="product__block__body__allergens-item">
-              <div class="product__block__body__allergens-item__name">Глютен</div>
-              <div class="product__block__body__allergens-item__value">не содержится</div>
+
+            <div v-for="(item, index) in useStore.openedProduct.allergens" :key="index"
+                 class="product__block__body__allergens-item">
+              <div class="product__block__body__allergens-item__name">{{ item.ruName }}</div>
+              <div v-if="item.status === false" class="product__block__body__allergens-item__value">не содержится</div>
+              <div v-if="item.status" class="product__block__body__allergens-item__value">содержится</div>
+              <div v-if="item.status === null" class="product__block__body__allergens-item__value">возможно</div>
             </div>
-            <div class="product__block__body__allergens-item">
-              <div class="product__block__body__allergens-item__name">Лактоза</div>
-              <div class="product__block__body__allergens-item__value">возможно</div>
-            </div>
-            <div class="product__block__body__allergens-item">
-              <div class="product__block__body__allergens-item__name">Орехи</div>
-              <div class="product__block__body__allergens-item__value">содержится</div>
-            </div>
+
           </div>
         </div>
       </div>
@@ -64,7 +113,7 @@
         </div>
         <div class="product__block__body product__block__body-profiles">
           <div class="product__block__body-profiles__img">
-            <img src="/src/assets/img/profiles_lock.svg" alt="Профили доступны только в приложении" />
+            <img src="/src/assets/img/profiles_lock.svg" alt="Профили доступны только в приложении"/>
           </div>
           <p class="product__block__body-profiles__text">Профили позволяют выбирать продукты, подходящие нескольким
             людям, учитывая их непереносимость и аллергии</p>
@@ -76,9 +125,9 @@
         </div>
         <div class="product__block__body product__block__body-bug">
           <p class="product__block__body-bug__text">Мы
-          стараемся сделать наш сервис максимально полезным и стараемся следить за достоверностью предоставляемой
-          информации, поэтому в случае расхождения состава или при ошибке определения наличия аллергенов, обязательно
-          сообщите нам</p>
+            стараемся сделать наш сервис максимально полезным и стараемся следить за достоверностью предоставляемой
+            информации, поэтому в случае расхождения состава или при ошибке определения наличия аллергенов, обязательно
+            сообщите нам</p>
           <router-link class="btn btn-white" :to="{name: 'contacts'}">Сообщить об ошибке</router-link>
         </div>
       </div>
