@@ -6,6 +6,7 @@ const router = useRouter();
 const useStore = useAppStore();
 
 function searchProduct() {
+  if(!useStore.searchQuery) return false;
   useStore.getResult();
   router.push({ path: '/search'});
 }

@@ -1,6 +1,5 @@
-import { defineStore } from "pinia";
+import {defineStore} from "pinia";
 import api from "../api/api";
-import {cloneDeep} from "lodash";
 
 export const useAppStore = defineStore({
   id: "appStore",
@@ -34,7 +33,7 @@ export const useAppStore = defineStore({
         this.isLoading = true;
         const response = await api.product(barcode);
         this.openedProduct = response.data.data[0];
-        this.openedProduct.compositionHtml = this.parseSupplements;
+        // this.openedProduct.compositionHtml = this.parseSupplements;
         this.isLoading = false;
       } catch (e) {
         this.error = e;
@@ -54,13 +53,21 @@ export const useAppStore = defineStore({
     }
   },
   getters: {
-    parseSupplements: (state) => {
-      let product = _.cloneDeep(state.openedProduct);
-      let compositionHtml = product.composition;
-      product.supplements.forEach((supplement) => {
-        compositionHtml = compositionHtml.replace(supplement.name, `<span @click="openAlert" data-level="${supplement.data.level}">${supplement.name}</span>`)
-      });
-      return compositionHtml;
+    textSupplements: (state) => {
+      const names = state.openedProduct.supplements.map(suppliment => suppliment.name)
+      const re = new RegExp(`(${names.join('|')})`);
+      const parts = state.openedProduct.composition.split(re);
+      return parts.map((part) => ({
+        text: part, isSuppliment: names.includes(part)
+      }));
     }
+    // parseSupplements: (state) => {
+    //   let product = _.cloneDeep(state.openedProduct);
+    //   let compositionHtml = product.composition;
+    //   product.supplements.forEach((supplement) => {
+    //     compositionHtml = compositionHtml.replace(supplement.name, `<span @click="openAlert" data-level="${supplement.data.level}">${supplement.name}</span>`)
+    //   });
+    //   return compositionHtml;
+    // }
   }
 });

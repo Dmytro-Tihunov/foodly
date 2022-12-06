@@ -1,11 +1,20 @@
 <script setup>
 import {useRoute} from "vue-router";
 import {useAppStore} from "@/store";
-import {onBeforeMount} from "vue";
+import {onBeforeMount, onMounted} from "vue";
 import {RouterLink} from "vue-router";
 
 const route = useRoute();
 const useStore = useAppStore();
+
+function getDataLevel(id) {
+  const mass = useStore.openedProduct.supplements.find((sup) => sup.name === id);
+  return mass.data.level
+}
+
+function getSupplement(id) {
+alert(id)
+}
 
 onBeforeMount(() => {
   useStore.getProduct(route.params.id);
@@ -71,7 +80,12 @@ onBeforeMount(() => {
           <h5 class="product__block__header-text">Состав</h5>
         </div>
         <div class="product__block__body">
-          <p v-html="useStore.openedProduct.compositionHtml" class="product__block__body-text"></p>
+          <p class="product__block__body-text">
+            <template v-for="text in useStore.textSupplements">
+          <template v-if="text.isSuppliment === false">{{text.text}}</template>
+          <span :data-level="getDataLevel(text.text)" v-if="text.isSuppliment === true" @click="getSupplement(text.text)">{{text.text}}</span>
+        </template>
+          </p>
         </div>
       </div>
       <div class="product__block product__block-analysis product__block-allergens">
