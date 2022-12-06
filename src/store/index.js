@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import api from "../api/api";
+import {cloneDeep} from "lodash";
 
 export const useAppStore = defineStore({
   id: "appStore",
@@ -54,8 +55,9 @@ export const useAppStore = defineStore({
   },
   getters: {
     parseSupplements: (state) => {
-      let compositionHtml = state.openedProduct.composition;
-      state.openedProduct.supplements.forEach((supplement) => {
+      let product = _.cloneDeep(state.openedProduct);
+      let compositionHtml = product.composition;
+      product.supplements.forEach((supplement) => {
         compositionHtml = compositionHtml.replace(supplement.name, `<span @click="openAlert" data-level="${supplement.data.level}">${supplement.name}</span>`)
       });
       return compositionHtml;
